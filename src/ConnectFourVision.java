@@ -140,14 +140,14 @@ public class ConnectFourVision {
 								/ 2);
 				for (Circle token : redTokens) {
 					if (token.containsPoint(point)) {
-						redTokens.remove(token);
 						result.set(col, Board.MARK_RED);
+						break;
 					}
 				}
 				for (Circle token : yellowTokens) {
 					if (token.containsPoint(point)) {
-						yellowTokens.remove(token);
 						result.set(col, Board.MARK_BLACK);
+						break;
 					}
 				}
 			}
