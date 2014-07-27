@@ -71,14 +71,14 @@ public class ConnectFourVision {
 		System.out.println("Found " + yellowTokens.size() + " yellow tokens.");
 
 		// Create and display debug image for how the computer sees the game board
-		Mat debugImage = new Mat(projection.size(),projection.type(),new Scalar(128,0,0));
-		for(Circle circle : redTokens){
-			Core.circle(debugImage, circle.getCenter(), circle.getRadius(), new Scalar(0,0,255),-1);
-		}
-		for(Circle circle : yellowTokens){
-			Core.circle(debugImage, circle.getCenter(), circle.getRadius(), new Scalar(0,255,255),-1);
-		}
 		if (ui) {
+			Mat debugImage = new Mat(projection.size(),projection.type(),new Scalar(128,0,0));
+			for(Circle circle : redTokens){
+				Core.circle(debugImage, circle.getCenter(), circle.getRadius(), new Scalar(0,0,255),-1);
+			}
+			for(Circle circle : yellowTokens){
+				Core.circle(debugImage, circle.getCenter(), circle.getRadius(), new Scalar(0,255,255),-1);
+			}
 			showResult(debugImage);
 		}
 
@@ -222,11 +222,8 @@ public class ConnectFourVision {
 
 		// Find possible border lines of the enclosing polygon
 		Mat newImage = Mat.zeros(boardThreshold.size(), boardThreshold.type());
-		Mat debugImage = originalBoardImage.clone();
 		Imgproc.drawContours(newImage, contours, maxContourIndex, new Scalar(
 				255));
-		Imgproc.drawContours(debugImage, contours, maxContourIndex, new Scalar(
-				0, 0, 255), 3);
 		Mat lines = new Mat();
 		Imgproc.HoughLines(newImage, lines, 1, Math.PI / 180, 75);
 		LinkedList<Line> detectedLines = new LinkedList<Line>();
@@ -236,13 +233,18 @@ public class ConnectFourVision {
 			Core.clipLine(
 					new Rect(0, 0, boardThreshold.width(), boardThreshold
 							.height()), line.getPt1(), line.getPt2());
-			Core.line(debugImage, line.getPt1(), line.getPt2(), new Scalar(0,
-					255, 0), 3);
 			detectedLines.push(line);
 		}
 		System.out.println("There are " + detectedLines.size()
 				+ " lines that were detected.");
 		if (ui) {
+			Mat debugImage = originalBoardImage.clone();
+			Imgproc.drawContours(debugImage, contours, maxContourIndex, new Scalar(
+				0, 0, 255), 3);
+			for (Line line : detectedLines) {
+				Core.line(debugImage, line.getPt1(), line.getPt2(), new Scalar(0,
+						255, 0), 3);
+			}
 			showResult(debugImage);
 		}
 

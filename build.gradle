@@ -12,7 +12,11 @@ dependencies {
 
 run {
   main = "Driver"
-  args = ["build/resources/test/connect_four.jpg"]
+  if(hasProperty("imagePath")) {
+    args = ["$imagePath"]
+  } else {
+    args = ["build/resources/main/connect_four.jpg"]
+  }
   systemProperty "java.library.path", "/home/scott/opencv-2.4.9/build/lib/"
 }
 
