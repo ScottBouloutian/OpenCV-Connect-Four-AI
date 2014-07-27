@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 import org.opencv.core.Core;
 
-public class SimpleSample {
+public class Driver {
 
 	static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
 
@@ -20,7 +20,7 @@ public class SimpleSample {
 			System.out.println("Starting Connect Four Analysis");
 			try {
 				BufferedImage image = ImageIO.read(new File(args[0]));
-				int bestMove = ConnectFourVision.getMoveForImage(image);
+				int bestMove = ConnectFourVision.getMoveForImage(image, true);
 				System.out.println("<BEST_MOVE>" + bestMove + "</BEST_MOVE>");
 			} catch (IOException e) {
 				e.printStackTrace();

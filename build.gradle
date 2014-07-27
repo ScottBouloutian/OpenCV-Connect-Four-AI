@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin:'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile files('/home/scott/opencv-2.4.9/build/bin/opencv-249.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+run {
+  main = "Driver"
+  args = ["build/resources/test/connect_four.jpg"]
+  systemProperty "java.library.path", "/home/scott/opencv-2.4.9/build/lib/"
+}
+
+test {
+    systemProperty "java.library.path", "/home/scott/opencv-2.4.9/build/lib/"
+}

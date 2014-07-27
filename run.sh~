@@ -1,1 +1,0 @@
-ant run -buildfile /home/scott/Desktop/Test/build.xml -DocvJarDir=/home/scott/ubuntu_installer/opencv-2.4.8/bin -DocvLibDir=/home/scott/ubuntu_installer/opencv-2.4.8/lib

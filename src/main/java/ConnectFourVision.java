@@ -31,30 +31,36 @@ public class ConnectFourVision {
 	private static final int NUM_THRESHOLDS = 2;
 	private static Mat originalBoardImage;
 
-	public static int getMoveForImage(BufferedImage image)
+	public static int getMoveForImage(BufferedImage image, boolean ui)
 			throws VisionException {
 		// Load the OpenCV Library
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		// Load the connect four original image
 		originalBoardImage = bufferedImageToMat(image);
-		
+
 		// Resize the image to a more manageable size
 		Imgproc.resize(originalBoardImage, originalBoardImage, new Size(622,457));
 
 		// Create a copy of the original image to use
 		Mat img = originalBoardImage.clone();
 
-		showResult(img);
-		
+		if (ui) {
+			showResult(img);
+		}
+
 		// Apply thresholding techniques the board image
-		//Mat boardThreshold = generateBoardThreshold(img);
+		// Mat boardThreshold = generateBoardThreshold(img);
 		Mat boardThreshold = performThresholdForColor(img,Color.BLUE);
-		showResult(boardThreshold);
+		if (ui) {
+			showResult(boardThreshold);
+		}
 
 		// Generate a mask from the thresholded board image
-		Mat projection = generateBoardProjection(boardThreshold.clone());
-		showResult(projection);
+		Mat projection = generateBoardProjection(boardThreshold.clone(), ui);
+		if (ui) {
+			showResult(projection);
+		}
 
 		// Find red tokens in the image
 		LinkedList<Circle> redTokens = findTokens(projection, Color.RED);
@@ -72,8 +78,10 @@ public class ConnectFourVision {
 		for(Circle circle : yellowTokens){
 			Core.circle(debugImage, circle.getCenter(), circle.getRadius(), new Scalar(0,255,255),-1);
 		}
-		showResult(debugImage);
-		
+		if (ui) {
+			showResult(debugImage);
+		}
+
 		// Verify the number of tokens
 		int tokenDifference = redTokens.size() - yellowTokens.size();
 		if (Math.abs(tokenDifference) > 1) {
@@ -97,11 +105,11 @@ public class ConnectFourVision {
 		}else{
 			System.out.println("It is Yellow's turn.");
 		}
-		
+
 		// Initialize the minimax structure to find a good move
 		Minimax minimax = new Minimax(board, 10);
 		int bestMove = minimax.alphaBeta(userTurn) + 1;
-		
+
 		return bestMove;
 	}
 
@@ -182,7 +190,7 @@ public class ConnectFourVision {
 		return minCircles;
 	}
 
-	private static Mat generateBoardProjection(Mat boardThreshold)
+	private static Mat generateBoardProjection(Mat boardThreshold, boolean ui)
 			throws VisionException {
 
 		// Find the polygon enclosing the blue connect four board
@@ -234,7 +242,9 @@ public class ConnectFourVision {
 		}
 		System.out.println("There are " + detectedLines.size()
 				+ " lines that were detected.");
-		showResult(debugImage);
+		if (ui) {
+			showResult(debugImage);
+		}
 
 		// Get the corners of the polygon and apply the transform
 		Mat corners1 = calculateBorderFromLines(detectedLines);
